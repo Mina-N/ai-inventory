@@ -79,6 +79,13 @@ def create_plot(topic_indices, topic_values, topic_name, data_subset, inventory_
     bars_sub = ax.barh(y - bar_height / 2, sub_topic_counts, bar_height,
                       label='Rights/safety-impacting',
                       color='#D85A30', zorder=3)
+
+  # Compute a dynamic x-limit that gives room for value labels
+  all_values = list(topic_values)
+  if sub_topic_counts:
+      all_values += list(sub_topic_counts)
+  max_val = max(all_values) if all_values else 0
+  x_max = max_val * 1.15   # 15% right-side padding for the text labels
   
   # Value labels
   for bar in bars_total:
@@ -100,7 +107,7 @@ def create_plot(topic_indices, topic_values, topic_name, data_subset, inventory_
   ax.set_xlabel("Number of use cases", fontsize=11)
   ax.set_title(topic_name + '\n' + data_subset + '\n(' + inventory_year + ' Federal AI Use Case Inventory)',
               fontsize=13, fontweight='bold', pad=14)
-  ax.set_xlim(0, 135)
+  ax.set_xlim(0, x_max)
   ax.xaxis.grid(True, color='#e0e0e0', zorder=0)
   ax.set_axisbelow(True)
   ax.spines[['top', 'right', 'left']].set_visible(False)
